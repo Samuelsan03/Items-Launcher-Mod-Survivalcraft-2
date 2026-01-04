@@ -1,0 +1,11 @@
+{
+  "Name": "Items Launcher",
+  "Version": "1.0",
+  "ApiVersion": "1.8",
+  "Description": "items launcher, un cañon de objetos que te permite lanzar cualquier objeto.",
+  "ScVersion": "2.4.10.4",
+  "Link": "",
+  "Author": "Fire Dragon, Kike",
+  "PackageName": "firedragon.scmods.itemslauncher",
+  "Dependencies": []
+}
