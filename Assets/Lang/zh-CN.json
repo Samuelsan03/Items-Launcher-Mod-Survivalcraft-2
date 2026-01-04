@@ -1,0 +1,24 @@
+{
+    "Blocks": {
+        "ItemsLauncherBlock:0": {
+            "DisplayName": "物品加农炮",
+            "Description": "发射任何类型的块或物体，即使制造成本很高，也要小心！因为它是一种像步枪一样强大的武器。",
+            "CRDescription:0": "通过修改新的步枪来制作物品发射器。"
+        }
+    },
+    "AutoCannonWidget": {
+        "Accept": "接受",
+        "OK": "确定",
+        "AutoCannonHelpTitle": "自动加农炮使用说明",
+        "AutoCannonHelpMessage": "作者\nFire Dragon\nKike\n----------\n该武器使用快捷栏的第一个插槽或第一个可用的带有物体的插槽。要保存任何更改，您必须按'接受'，或按'X'放弃更改。散布和速度设置决定射弹的方向和距离。\n\n要使用它，如果您在PC上，只需按住右键；如果您在移动设备上，则按住屏幕，它将按照您配置的每秒次数自动发射。适用于快速发射生成蛋并在短时间内大量生成生物。\n\n您还可以享受发射烟花或其他任何物体的乐趣。\n\n\n代码由Samuelsan03修改，所以你可以随意使用此代码 xd",
+        "Velocidad De Proyectil": "射弹速度",
+        "Disparos Por Segundo": "每秒射击次数",
+        "Dispersion De Proyectiles": "射弹散布",
+        "Combustible": "燃料",
+        "Inventario": "库存",
+        "AutoCanon": "自动加农炮"
+    },
+    "SubsystemItemsLauncherBlockBehavior": {
+        "YouNeedAmmunition": "需要弹药才能发射物品发射器"
+    }
+}

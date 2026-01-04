@@ -1,0 +1,24 @@
+{
+    "Blocks": {
+        "ItemsLauncherBlock:0": {
+            "DisplayName": "Cañón de objetos",
+            "Description": "Lanza cualquier tipo de bloque u objeto aun que es cara de fabricar, ¡cuidado! por que es un arma poderosa como el mosquete.",
+            "CRDescription:0": "Haz un lanzador de objetos modificando un mosquete nuevo."
+        }
+    },
+    "AutoCannonWidget": {
+        "Accept": "Aceptar",
+        "OK": "Aceptar",
+        "AutoCannonHelpTitle": "Uso del Cañón Automático",
+        "AutoCannonHelpMessage": "Autores\nDragón de Fuego\nKike\n----------\nEsta arma utiliza el primer espacio de la barra rápida o el primer espacio disponible con un objeto. Para guardar los cambios, debes presionar 'Aceptar', o 'X' para descartar. La configuración de dispersión y velocidad determina la dirección y distancia de los proyectiles.\n\nPara usarlo, simplemente mantén presionado el clic derecho si estás en PC, o mantén presionada la pantalla si estás en un dispositivo móvil, y disparará automáticamente las veces por segundo que hayas configurado. Útil para disparar huevos de spawn y generar criaturas en grandes cantidades en poco tiempo.\n\nTambién puedes divertirte lanzando fuegos artificiales o cualquier otro objeto.\n\n\nCódigo modificado por Samuelsan03, así que haz lo que quieras con este código xd",
+        "Velocidad De Proyectil": "Velocidad de proyectil",
+        "Disparos Por Segundo": "Disparos por segundo",
+        "Dispersion De Proyectiles": "Dispersión de proyectiles",
+        "Combustible": "Combustible",
+        "Inventario": "Inventario",
+        "AutoCanon": "Auto-Cañón"
+    },
+    "SubsystemItemsLauncherBlockBehavior": {
+        "YouNeedAmmunition": "Necesitas munición para disparar el lanzador de objetos"
+    }
+}

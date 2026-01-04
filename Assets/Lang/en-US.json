@@ -1,0 +1,24 @@
+{
+    "Blocks": {
+        "ItemsLauncherBlock:0": {
+            "DisplayName": "Object Cannon",
+            "Description": "Launches any type of block or object even though it is expensive to manufacture, be careful! because it is a powerful weapon like the musket.",
+            "CRDescription:0": "Make an item launcher by modifying a new musket."
+        }
+    },
+    "AutoCannonWidget": {
+        "Accept": "Accept",
+        "OK": "OK",
+        "AutoCannonHelpTitle": "Auto-Cannon Usage",
+        "AutoCannonHelpMessage": "Authors\nFire Dragon\nKike\n----------\nThis weapon uses the first slot of the hotbar or the first available slot with an object. To save any changes, you must press 'Accept', or 'X' to discard. The spread and velocity settings determine the direction and distance of the projectiles.\n\nTo use it, simply hold right click if you are on PC, or hold the screen if you are on a mobile device, and it will automatically fire the times per second you have configured. Useful for shooting spawn eggs and generating creatures in large quantities in a short time.\n\nYou can also have fun launching fireworks or any other object.\n\n\nShitty code stolen by Samuelsan03, so do whatever you want with this code xd",
+        "Velocidad De Proyectil": "Projectile Speed",
+        "Disparos Por Segundo": "Shots per Second",
+        "Dispersion De Proyectiles": "Projectile Spread",
+        "Combustible": "Fuel",
+        "Inventario": "Inventory",
+        "AutoCanon": "Auto-Cannon"
+    },
+    "SubsystemItemsLauncherBlockBehavior": {
+        "YouNeedAmmunition": "You need ammunition to fire the item launcher"
+    }
+}
