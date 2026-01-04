@@ -6,7 +6,6 @@ using TemplatesDatabase;
 
 namespace Game
 {
-
 	public class SubsystemItemsLauncherBlockBehavior : SubsystemBlockBehavior
 	{
 		public override int[] HandledBlocks
@@ -15,7 +14,7 @@ namespace Game
 			{
 				return new int[]
 				{
-				ItemsLauncherBlock.Index
+					ItemsLauncherBlock.Index
 				};
 			}
 		}
@@ -28,87 +27,76 @@ namespace Game
 
 		public override bool OnAim(Ray3 aim, ComponentMiner miner, AimState state)
 		{
-			bool flag = miner.Inventory == null;
-			bool result;
-			if (flag)
+			if (miner.Inventory == null)
 			{
-				result = false;
+				return false;
 			}
-			else
+
+			int slotValue = miner.Inventory.GetSlotValue(miner.Inventory.ActiveSlotIndex);
+			if (Terrain.ExtractContents(slotValue) != ItemsLauncherBlock.Index)
 			{
-				int slotValue = miner.Inventory.GetSlotValue(miner.Inventory.ActiveSlotIndex);
-				bool flag2 = Terrain.ExtractContents(slotValue) != ItemsLauncherBlock.Index;
-				if (flag2)
-				{
-					result = false;
-				}
-				else
-				{
-					int data = Terrain.ExtractData(slotValue);
-					int num = ItemsLauncherBlock.GetRateLevel(data);
-					bool flag3 = num == 0;
-					if (flag3)
-					{
-						num = 2;
-					}
-					switch (state)
-					{
-						case 0:
-							{
-								ComponentFirstPersonModel componentFirstPersonModel = miner.Entity.FindComponent<ComponentFirstPersonModel>();
-								bool flag4 = componentFirstPersonModel != null;
-								if (flag4)
-								{
-									ComponentPlayer componentPlayer = miner.ComponentPlayer;
-									if (componentPlayer != null)
-									{
-										componentPlayer.ComponentAimingSights.ShowAimingSights(aim.Position, aim.Direction);
-									}
-									componentFirstPersonModel.ItemOffsetOrder = new Vector3(-0.21f, 0.15f, 0.08f);
-									componentFirstPersonModel.ItemRotationOrder = new Vector3(-0.7f, 0f, 0f);
-								}
-								miner.ComponentCreature.ComponentCreatureModel.AimHandAngleOrder = 1.4f;
-								miner.ComponentCreature.ComponentCreatureModel.InHandItemOffsetOrder = new Vector3(-0.08f, -0.08f, 0.07f);
-								miner.ComponentCreature.ComponentCreatureModel.InHandItemRotationOrder = new Vector3(-1.7f, 0f, 0f);
-								bool flag5 = num > 1;
-								if (flag5)
-								{
-									float num2 = SubsystemItemsLauncherBlockBehavior.m_rateValues[num - 1];
-									double gameTime = this.m_subsystemTime.GameTime;
-									double num3;
-									bool flag6 = !this.m_nextFireTimes.TryGetValue(miner, out num3);
-									if (flag6)
-									{
-										num3 = gameTime + 0.2;
-										this.m_nextFireTimes[miner] = num3;
-									}
-									bool flag7 = gameTime >= num3;
-									if (flag7)
-									{
-										this.Fire(miner, aim);
-										this.m_nextFireTimes[miner] = gameTime + 1.0 / (double)num2;
-									}
-								}
-								break;
-							}
-						case (AimState)1:
-							this.m_nextFireTimes.Remove(miner);
-							break;
-						case (AimState)2:
-							{
-								bool flag8 = num == 1;
-								if (flag8)
-								{
-									this.Fire(miner, aim);
-								}
-								this.m_nextFireTimes.Remove(miner);
-								break;
-							}
-					}
-					result = false;
-				}
+				return false;
 			}
-			return result;
+
+			int data = Terrain.ExtractData(slotValue);
+			int num = ItemsLauncherBlock.GetRateLevel(data);
+			if (num == 0)
+			{
+				num = 2;
+			}
+
+			switch (state)
+			{
+				case AimState.InProgress:
+					{
+						ComponentFirstPersonModel componentFirstPersonModel = miner.Entity.FindComponent<ComponentFirstPersonModel>();
+						if (componentFirstPersonModel != null)
+						{
+							ComponentPlayer componentPlayer = miner.ComponentPlayer;
+							if (componentPlayer != null)
+							{
+								componentPlayer.ComponentAimingSights.ShowAimingSights(aim.Position, aim.Direction);
+							}
+							componentFirstPersonModel.ItemOffsetOrder = new Vector3(-0.21f, 0.15f, 0.08f);
+							componentFirstPersonModel.ItemRotationOrder = new Vector3(-0.7f, 0f, 0f);
+						}
+
+						miner.ComponentCreature.ComponentCreatureModel.AimHandAngleOrder = 1.4f;
+						miner.ComponentCreature.ComponentCreatureModel.InHandItemOffsetOrder = new Vector3(-0.08f, -0.08f, 0.07f);
+						miner.ComponentCreature.ComponentCreatureModel.InHandItemRotationOrder = new Vector3(-1.7f, 0f, 0f);
+
+						if (num > 1)
+						{
+							float num2 = SubsystemItemsLauncherBlockBehavior.m_rateValues[num - 1];
+							double gameTime = this.m_subsystemTime.GameTime;
+							double num3;
+							if (!this.m_nextFireTimes.TryGetValue(miner, out num3))
+							{
+								num3 = gameTime + 0.2;
+								this.m_nextFireTimes[miner] = num3;
+							}
+
+							if (gameTime >= num3)
+							{
+								this.Fire(miner, aim);
+								this.m_nextFireTimes[miner] = gameTime + 1.0 / (double)num2;
+							}
+						}
+						break;
+					}
+				case AimState.Cancelled:
+					this.m_nextFireTimes.Remove(miner);
+					break;
+				case AimState.Completed:
+					if (num == 1)
+					{
+						this.Fire(miner, aim);
+					}
+					this.m_nextFireTimes.Remove(miner);
+					break;
+			}
+
+			return false;
 		}
 
 		private void Fire(ComponentMiner miner, Ray3 aim)
@@ -119,7 +107,7 @@ namespace Game
 			int data = Terrain.ExtractData(slotValue);
 			GameMode gameMode = this.m_subsystemGameInfo.WorldSettings.GameMode;
 
-			// Verificar si hay fuel disponible (pero no impedir el disparo)
+			// Verificar si hay fuel disponible
 			bool hasFuel = false;
 			if (gameMode > 0)
 			{
@@ -140,35 +128,21 @@ namespace Game
 			int num2 = -1;
 			for (int i = 0; i < 10; i++)
 			{
-				bool flag3 = i != activeSlotIndex;
-				if (flag3)
+				if (i != activeSlotIndex && inventory.GetSlotCount(i) > 0)
 				{
-					bool flag4 = inventory.GetSlotCount(i) > 0;
-					if (flag4)
-					{
-						num = inventory.GetSlotValue(i);
-						num2 = i;
-						break;
-					}
+					num = inventory.GetSlotValue(i);
+					num2 = i;
+					break;
 				}
 			}
 
-			bool flag5 = num2 != -1;
-			if (flag5)
+			if (num2 != -1)
 			{
 				// Configurar parámetros de disparo
 				int num5 = ItemsLauncherBlock.GetSpeedLevel(data);
 				int num6 = ItemsLauncherBlock.GetSpreadLevel(data);
-				bool flag7 = num5 == 0;
-				if (flag7)
-				{
-					num5 = 2;
-				}
-				bool flag8 = num6 == 0;
-				if (flag8)
-				{
-					num6 = 2;
-				}
+				if (num5 == 0) num5 = 2;
+				if (num6 == 0) num6 = 2;
 
 				float num7 = SubsystemItemsLauncherBlockBehavior.m_speedValues[num5 - 1];
 				float num8 = SubsystemItemsLauncherBlockBehavior.m_spreadValues[num6 - 1];
@@ -197,12 +171,11 @@ namespace Game
 			}
 			else
 			{
-				// Mostrar mensaje cuando no hay munición - SIN SONIDO DE NOTIFICACIÓN
+				// Mostrar mensaje cuando no hay munición
 				ComponentPlayer componentPlayer = miner.ComponentPlayer;
 				if (componentPlayer != null)
 				{
-					// El último parámetro 'false' evita que se reproduzca el sonido de notificación
-					string message = LanguageControl.Get("YouNeedAmmunition", "You need ammunition to fire the item launcher");
+					string message = LanguageControl.Get("SubsystemItemsLauncherBlockBehavior", "YouNeedAmmunition");
 					componentPlayer.ComponentGui.DisplaySmallMessage(message, Color.Orange, true, false);
 				}
 
@@ -226,35 +199,17 @@ namespace Game
 
 		private static readonly float[] m_speedValues = new float[]
 		{
-		10f,
-		35f,
-		60f
+			10f, 35f, 60f
 		};
 
 		private static readonly float[] m_rateValues = new float[]
 		{
-		1f,
-		2f,
-		3f,
-		4f,
-		5f,
-		6f,
-		7f,
-		8f,
-		9f,
-		10f,
-		11f,
-		12f,
-		13f,
-		14f,
-		15f
+			1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f, 11f, 12f, 13f, 14f, 15f
 		};
 
 		private static readonly float[] m_spreadValues = new float[]
 		{
-		0.01f,
-		0.1f,
-		0.5f
+			0.01f, 0.1f, 0.5f
 		};
 
 		private Dictionary<ComponentMiner, double> m_nextFireTimes = new Dictionary<ComponentMiner, double>();
